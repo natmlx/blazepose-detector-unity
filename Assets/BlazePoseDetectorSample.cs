@@ -15,7 +15,7 @@ namespace NatML.Examples {
     public sealed class BlazePoseDetectorSample : MonoBehaviour {   
 
         [Header(@"UI")]
-        public BlazePoseDetectionVisualizer visualizer;
+        public DetectionVisualizer visualizer;
 
         CameraDevice cameraDevice;
         TextureOutput previewTextureOutput;

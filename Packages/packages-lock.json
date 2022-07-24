@@ -26,7 +26,7 @@
       "url": "https://registry.npmjs.com"
     },
     "ai.natml.vision.blazepose.detector": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {

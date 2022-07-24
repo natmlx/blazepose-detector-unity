@@ -36,7 +36,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets/BlazePoseDetectionVisualizer.cs" />
+     <Compile Include="Assets/DetectionVisualizer.cs" />
      <Compile Include="Assets/BlazePoseDetectorSample.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/Unity/Hub/Editor/2021.3.4f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>

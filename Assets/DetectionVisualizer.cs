@@ -13,7 +13,7 @@ namespace NatML.Examples.Visualizers {
     /// <summary>
     /// </summary>
     [RequireComponent(typeof(RawImage), typeof(AspectRatioFitter))]
-    public sealed class BlazePoseDetectionVisualizer : MonoBehaviour {
+    public sealed class DetectionVisualizer : MonoBehaviour {
 
         #region --Inspector--
         /// <summary>
@@ -35,14 +35,14 @@ namespace NatML.Examples.Visualizers {
         /// <summary>
         /// Visualize a set of detected poses.
         /// </summary>
-        /// <param name="poses">Poses to render.</param>
-        public void Render (params BlazePoseDetector.Pose[] poses) {
+        /// <param name="detections">Poses to render.</param>
+        public void Render (params BlazePoseDetector.Detection[] detections) {
             // Delete current
             foreach (var rect in currentRects)
                 GameObject.Destroy(rect.gameObject);
             currentRects.Clear();
             // Render rects
-            foreach (var pose in poses) {
+            foreach (var pose in detections) {
                 var prefab = Instantiate(rectangle, transform);
                 prefab.gameObject.SetActive(true);
                 var roi = pose.regionOfInterest;
