@@ -14,4 +14,4 @@ jobs:
       with:
         registry-url: 'https://registry.npmjs.org'
     - run: npm publish --access public
-      working-directory: Packages/ai.natml.vision.blazepose-detector
+      working-directory: Packages/ai.natml.vision.blazepose.detector
