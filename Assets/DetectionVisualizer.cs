@@ -1,5 +1,5 @@
 /* 
-*   BlazePose
+*   BlazePose Detector
 *   Copyright (c) 2022 NatML Inc. All Rights Reserved.
 */
 
@@ -24,6 +24,9 @@ namespace NatML.Examples.Visualizers {
 
 
         #region --Client API--
+        /// <summary>
+        /// Detection source image.
+        /// </summary>
         public Texture2D image {
             get => rawImage.texture as Texture2D;
             set {

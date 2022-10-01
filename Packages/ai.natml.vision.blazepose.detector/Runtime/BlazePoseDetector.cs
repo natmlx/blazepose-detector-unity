@@ -31,7 +31,7 @@ namespace NatML.Vision {
             this.maxIoU = maxIoU;
             this.anchors = GenerateAnchors(
                 model.inputs[0] as MLImageType,
-                new [] { 8, 16, 16, 16 }, //new [] { 8, 16, 32, 32, 32 },
+                new [] { 8, 16, 16, 16 },
                 0.1484375f,
                 0.75f
             );
@@ -112,20 +112,14 @@ namespace NatML.Vision {
         private readonly MLEdgeModel model;
         private readonly float minScore;
         private readonly float maxIoU;
+        private readonly Vector2[] anchors;
         private readonly List<Rect> candidateBoxes;
         private readonly List<float> candidateScores;
         private readonly List<Vector2[]> candidatePoints;
-        private readonly Vector2[] anchors;
 
         void IDisposable.Dispose () { } // Not used
 
-        private static Vector2[] GenerateAnchors (
-            MLImageType type,
-            int[] strides,
-            float minScale,
-            float maxScale,
-            float aspect = 1f
-        ) {
+        private static Vector2[] GenerateAnchors (MLImageType type, int[] strides, float minScale, float maxScale, float aspect = 1f) {
             var result = new List<Vector2>();
             var layerId = 0;
             while (layerId < strides.Length) {
@@ -154,13 +148,8 @@ namespace NatML.Vision {
             }
             return result.ToArray();
         }
-
-        private static float CalculateScale (
-            float minScale,
-            float maxScale,
-            int strideIdx,
-            int strideCount
-        ) {
+    
+        private static float CalculateScale (float minScale, float maxScale, int strideIdx, int strideCount) {
             if (strideCount == 1)
                 return (minScale + maxScale) * 0.5f;
             else

@@ -1,5 +1,5 @@
 /* 
-*   BlazePose
+*   BlazePose Detector
 *   Copyright (c) 2022 NatML Inc. All Rights Reserved.
 */
 
@@ -49,15 +49,14 @@ namespace NatML.Examples {
             // Check that the detector has been loaded
             if (predictor == null)
                 return;
-            // Create input feature
-            var previewTexture = previewTextureOutput.texture;
-            var imageFeature = new MLImageFeature(previewTexture.GetRawTextureData<byte>(), previewTexture.width, previewTexture.height);
+            // Create image feature
+            var imageFeature = new MLImageFeature(previewTextureOutput.texture);
             (imageFeature.mean, imageFeature.std) = modelData.normalization;
             imageFeature.aspectMode = modelData.aspectMode;
-            // Predict
-            var poses = predictor.Predict(imageFeature);
-            // Visualize
-            visualizer.Render(poses);
+            // Detect people in the image
+            var detections = predictor.Predict(imageFeature);
+            // Visualize detections
+            visualizer.Render(detections);
         }
     }
 }
