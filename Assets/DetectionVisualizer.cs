@@ -8,11 +8,12 @@ namespace NatML.Examples.Visualizers {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using NatML.VideoKit.UI;
     using NatML.Vision;
 
     /// <summary>
     /// </summary>
-    [RequireComponent(typeof(RawImage), typeof(AspectRatioFitter))]
+    [RequireComponent(typeof(VideoKitCameraView))]
     public sealed class DetectionVisualizer : MonoBehaviour {
 
         #region --Inspector--
@@ -25,17 +26,6 @@ namespace NatML.Examples.Visualizers {
 
         #region --Client API--
         /// <summary>
-        /// Detection source image.
-        /// </summary>
-        public Texture2D image {
-            get => rawImage.texture as Texture2D;
-            set {
-                rawImage.texture = value;
-                aspectFitter.aspectRatio = (float)value.width / value.height;
-            }
-        }
-
-        /// <summary>
         /// Visualize a set of detected poses.
         /// </summary>
         /// <param name="detections">Poses to render.</param>
@@ -45,6 +35,7 @@ namespace NatML.Examples.Visualizers {
                 GameObject.Destroy(rect.gameObject);
             currentRects.Clear();
             // Render rects
+            var image = rawImage.texture;
             foreach (var pose in detections) {
                 var prefab = Instantiate(rectangle, transform);
                 prefab.gameObject.SetActive(true);
@@ -61,16 +52,12 @@ namespace NatML.Examples.Visualizers {
 
 
         #region --Operations--
-        RawImage rawImage;
-        AspectRatioFitter aspectFitter;
-        List<Image> currentRects = new List<Image>();
+        private RawImage rawImage;
+        private List<Image> currentRects = new List<Image>();
 
-        void Awake () {
-            rawImage = GetComponent<RawImage>();
-            aspectFitter = GetComponent<AspectRatioFitter>();
-        }
+        private void Awake () => rawImage = GetComponent<RawImage>();
 
-        void Render (Image prefab, Rect rect, float rotation) {
+        private void Render (Image prefab, Rect rect, float rotation) {
             var rectTransform = prefab.transform as RectTransform;
             var imageTransform = rawImage.transform as RectTransform;
             rectTransform.anchorMin = 0.5f * Vector2.one;

@@ -62,7 +62,7 @@ namespace NatML.Vision {
                 get {
                     var hipCenter = Vector2.Scale(midHipCenter, imageSize);
                     var scalePoint = Vector2.Scale(points[1], imageSize);
-                    var boxSize = 2f * (hipCenter - scalePoint).magnitude;
+                    var boxSize = 1.5f * (hipCenter - scalePoint).magnitude;
                     var length = 1.25f * boxSize;
                     var size = Vector2Int.RoundToInt(length * Vector2.one);
                     var minPoint = Vector2Int.RoundToInt(hipCenter - 0.5f * (Vector2)size);
