@@ -9,14 +9,15 @@ Logs/
 .gradle/
 .vs/
 
+# Function
+ProjectSettings/Function.asset
+
 # NatML
-Assets/NatML
-Assets/NatML.meta
+ProjectSettings/NatML.asset
 ProjectSettings/NatMLHub.asset
 
-# ARFoundation Remote
-ARFoundationRemoteInstaller
-ARFoundationRemoteCompanionApp/
+# VideoKit
+ProjectSettings/VideoKit.asset
 
 # Misc
 .DS_Store

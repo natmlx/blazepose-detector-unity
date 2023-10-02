@@ -1,6 +1,6 @@
 /* 
 *   BlazePose Detector
-*   Copyright (c) 2022 NatML Inc. All Rights Reserved.
+*   Copyright (c) 2023 NatML Inc. All Rights Reserved.
 */
 
 namespace NatML.Examples.Visualizers {
@@ -8,8 +8,8 @@ namespace NatML.Examples.Visualizers {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
-    using NatML.VideoKit.UI;
     using NatML.Vision;
+    using VideoKit.UI;
 
     /// <summary>
     /// </summary>

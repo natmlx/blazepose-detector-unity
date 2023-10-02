@@ -1,12 +1,13 @@
 /* 
 *   BlazePose
-*   Copyright (c) 2022 NatML Inc. All Rights Reserved.
+*   Copyright (c) 2023 NatML Inc. All Rights Reserved.
 */
 
 namespace NatML.Vision {
 
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using UnityEngine;
     using NatML.Features;
     using NatML.Internal;
@@ -20,25 +21,9 @@ namespace NatML.Vision {
 
         #region --Client API--
         /// <summary>
-        /// Create the BlazePose detection predictor.
+        /// Predictor tag.
         /// </summary>
-        /// <param name="model">BlazePose detector ML model.</param>
-        /// <param name="minScore">Minimum candidate detection score.</param>
-        /// <param name="maxIoU">Maximum intersection-over-union score for overlap removal.</param>
-        public BlazePoseDetector (MLModel model, float minScore = 0.4f, float maxIoU = 0.3f) {
-            this.model = model as MLEdgeModel;
-            this.minScore = minScore;
-            this.maxIoU = maxIoU;
-            this.anchors = GenerateAnchors(
-                model.inputs[0] as MLImageType,
-                new [] { 8, 16, 16, 16 },
-                0.1484375f,
-                0.75f
-            );
-            this.candidateBoxes = new List<Rect>(anchors.Length);
-            this.candidateScores = new List<float>(anchors.Length);
-            this.candidatePoints = new List<Vector2[]>(anchors.Length);
-        }
+        public const string Tag = "@natml/blazepose-detector";
 
         /// <summary>
         /// Detect poses in an image.
@@ -55,6 +40,11 @@ namespace NatML.Vision {
             var imageFeature = input as MLImageFeature;
             if (!imageType)
                 throw new ArgumentException(@"BlazePose detector expects an an array or image feature", nameof(inputs));
+            // Pre-processing
+            if (imageFeature != null) {
+                (imageFeature.mean, imageFeature.std) = model.normalization;
+                imageFeature.aspectMode = model.aspectMode;
+            }
             // Predict
             var inputType = model.inputs[0] as MLImageType;
             using var inputFeature = (input as IMLEdgeFeature).Create(inputType);
@@ -105,6 +95,30 @@ namespace NatML.Vision {
             }
             return result.ToArray();
         }
+
+        /// <summary>
+        /// Dispose the model and release resources.
+        /// </summary>
+        public void Dispose () => model.Dispose();
+
+        /// <summary>
+        /// Create the BlazePose detector.
+        /// </summary>
+        /// <param name="minScore">Minimum candidate detection score.</param>
+        /// <param name="maxIoU">Maximum intersection-over-union score for overlap removal.</param>
+        /// <param name="configuration">Edge model configuration.</param>
+        /// <param name="accessKey">NatML access key.</param>
+        /// <returns></returns>
+        public static async Task<BlazePoseDetector> Create (
+            float minScore = 0.4f,
+            float maxIoU = 0.3f,
+            MLEdgeModel.Configuration configuration = null,
+            string accessKey = null
+        ) {
+            var model = await MLEdgeModel.Create(Tag, configuration, accessKey);
+            var predictor = new BlazePoseDetector(model, minScore, maxIoU);
+            return predictor;
+        }
         #endregion
 
 
@@ -117,7 +131,20 @@ namespace NatML.Vision {
         private readonly List<float> candidateScores;
         private readonly List<Vector2[]> candidatePoints;
 
-        void IDisposable.Dispose () { } // Not used
+        private BlazePoseDetector (MLModel model, float minScore = 0.4f, float maxIoU = 0.3f) {
+            this.model = model as MLEdgeModel;
+            this.minScore = minScore;
+            this.maxIoU = maxIoU;
+            this.anchors = GenerateAnchors(
+                model.inputs[0] as MLImageType,
+                new [] { 8, 16, 16, 16 },
+                0.1484375f,
+                0.75f
+            );
+            this.candidateBoxes = new List<Rect>(anchors.Length);
+            this.candidateScores = new List<float>(anchors.Length);
+            this.candidatePoints = new List<Vector2[]>(anchors.Length);
+        }
 
         private static Vector2[] GenerateAnchors (MLImageType type, int[] strides, float minScale, float maxScale, float aspect = 1f) {
             var result = new List<Vector2>();
